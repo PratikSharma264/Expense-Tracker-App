@@ -1,11 +1,12 @@
 const CACHE_NAME = 'expense-tracker-v1';
 const urlsToCache = [
-    '/index.html',
-    '/styles.css',
-    '/app.js',
-    '/manifest.json',
-    '/icon-192.png',
-    '/icon-512.png',
+    './',
+    './index.html',
+    './styles.css',
+    './app.js',
+    './manifest.json',
+    './icon-192.png',
+    './icon-512.png',
     'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
     'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'
 ];
@@ -57,7 +58,7 @@ self.addEventListener('fetch', (event) => {
             })
             .catch(() => {
                 // If both cache and network fail, show offline page
-                return caches.match('/index.html');
+                return caches.match('./index.html');
             })
     );
 });
@@ -98,8 +99,8 @@ async function syncExpenses() {
 self.addEventListener('push', (event) => {
     const options = {
         body: event.data ? event.data.text() : 'New expense reminder',
-        icon: '/icon-192.png',
-        badge: '/icon-192.png',
+        icon: './icon-192.png',
+        badge: './icon-192.png',
         vibrate: [200, 100, 200]
     };
 
