@@ -1,22 +1,23 @@
 {
-    "version": 2,
-    "builds": [
+    "rewrites": [
         {
-            "src": "index.html",
-            "use": "@vercel/static"
+            "source": "/(.*)",
+            "destination": "/$1"
         }
     ],
-    "routes": [
+    "headers": [
         {
-            "src": "/service-worker.js",
-            "headers": {
-                "cache-control": "public, max-age=0, must-revalidate",
-                "service-worker-allowed": "/"
-            }
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/$1"
+            "source": "/service-worker.js",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=0, must-revalidate"
+                },
+                {
+                    "key": "Service-Worker-Allowed",
+                    "value": "/"
+                }
+            ]
         }
     ]
 }
