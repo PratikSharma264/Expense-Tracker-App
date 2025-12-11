@@ -50,6 +50,4 @@ Users can install this app on their devices:
 
 This app is deployed on Vercel for free hosting with HTTPS.
 
-## License
 
-MIT License - Feel free to use for personal or commercial projects.
