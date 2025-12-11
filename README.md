@@ -1,4 +1,4 @@
-# ExpTrack - Expense Tracker PWA
+# CashCraft - Expense Tracker PWA
 
 A professional expense tracking Progressive Web App with user authentication.
 

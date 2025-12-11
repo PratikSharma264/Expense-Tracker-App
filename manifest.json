@@ -1,7 +1,7 @@
 {
-  "name": "ExpTrack - Expense Tracker",
-  "short_name": "ExpTrack",
-  "description": "Professional expense tracker to manage your finances, track spending, and visualize expenses with beautiful charts",
+  "name": "CashCraft - Expense Tracker",
+  "short_name": "CashCraft",
+  "description": "CashCraft - Professional expense tracker to manage your finances, track spending, and visualize expenses with beautiful charts",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0f0f1e",

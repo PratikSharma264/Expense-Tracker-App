@@ -1,7 +1,8 @@
-const CACHE_NAME = 'expense-tracker-v1';
+const CACHE_NAME = 'cashcraft-v1';
 const urlsToCache = [
     './',
     './index.html',
+    './contact.html',
     './styles.css',
     './app.js',
     './manifest.json',
