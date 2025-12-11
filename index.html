@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Professional expense tracker app to manage your finances, track spending, and visualize expenses with beautiful charts and insights.">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ExpTrack">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <title>ExpTrack - Manage Your Finances</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+    <!-- Login/Signup Screen -->
+    <div id="auth-screen" class="auth-screen">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <svg width="64" height="64" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="8" fill="url(#gradient)" />
+                    <path d="M16 8L22 14H18V20H14V14H10L16 8Z" fill="white" />
+                    <rect x="10" y="22" width="12" height="2" rx="1" fill="white" />
+                    <defs>
+                        <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#667eea" />
+                            <stop offset="100%" stop-color="#764ba2" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>ExpTrack</h1>
+                <p>Your Personal Finance Manager</p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form">
+                <h2>Welcome Back</h2>
+                <p class="auth-subtitle">Sign in to access your expenses</p>
+
+                <form id="login-form-element">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" placeholder="your@email.com" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="Enter your password" required
+                            autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+                </form>
+
+                <p class="auth-switch">
+                    Don't have an account?
+                    <a href="#" id="show-signup">Sign up</a>
+                </p>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form" class="auth-form" style="display: none;">
+                <h2>Create Account</h2>
+                <p class="auth-subtitle">Start tracking your expenses today</p>
+
+                <form id="signup-form-element">
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" placeholder="John Doe" required autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" id="signup-email" placeholder="your@email.com" required
+                            autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" placeholder="At least 6 characters" required
+                            autocomplete="new-password" minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-confirm-password">Confirm Password</label>
+                        <input type="password" id="signup-confirm-password" placeholder="Re-enter password" required
+                            autocomplete="new-password" minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+                </form>
+
+                <p class="auth-switch">
+                    Already have an account?
+                    <a href="#" id="show-login">Sign in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" rx="8" fill="url(#gradient)" />
+                        <path d="M16 8L22 14H18V20H14V14H10L16 8Z" fill="white" />
+                        <rect x="10" y="22" width="12" height="2" rx="1" fill="white" />
+                        <defs>
+                            <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+                                <stop offset="0%" stop-color="#667eea" />
+                                <stop offset="100%" stop-color="#764ba2" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <h1>ExpTrack</h1>
+                </div>
+                <div class="header-actions">
+                    <span id="user-email" class="user-email"></span>
+                    <button id="logout-btn" class="btn btn-outline btn-sm" style="display: none;">Logout</button>
+                    <select id="currency-selector" class="currency-selector" aria-label="Select currency">
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="GBP">GBP (£)</option>
+                        <option value="INR">INR (₹)</option>
+                        <option value="NPR">NPR (रू)</option>
+                        <option value="JPY">JPY (¥)</option>
+                        <option value="AUD">AUD (A$)</option>
+                        <option value="CAD">CAD (C$)</option>
+                    </select>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                        <svg class="sun-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="2" />
+                            <path
+                                d="M10 2V4M10 16V18M18 10H16M4 10H2M15.657 4.343L14.243 5.757M5.757 14.243L4.343 15.657M15.657 15.657L14.243 14.243M5.757 5.757L4.343 4.343"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        <svg class="moon-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path
+                                d="M17 10.5C16.9 14.6 13.6 18 9.5 18C5.4 18 2 14.6 2 10.5C2 6.4 5.4 3 9.5 3C9.7 3 9.9 3 10.1 3.1C9.4 4.1 9 5.3 9 6.5C9 9.5 11.5 12 14.5 12C15.7 12 16.9 11.6 17.9 10.9C17.9 11.1 17.9 11.3 17 10.5Z"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard Summary -->
+            <section class="dashboard" id="dashboard-section">
+                <div class="summary-cards">
+                    <div class="summary-card card-gradient-1">
+                        <div class="card-icon">💰</div>
+                        <div class="card-content">
+                            <p class="card-label">Total Expenses</p>
+                            <h2 class="card-value" id="total-expenses">$0.00</h2>
+                            <p class="card-trend" id="total-trend">All time</p>
+                        </div>
+                    </div>
+                    <div class="summary-card card-gradient-2">
+                        <div class="card-icon">📅</div>
+                        <div class="card-content">
+                            <p class="card-label">This Month</p>
+                            <h2 class="card-value" id="month-expenses">$0.00</h2>
+                            <p class="card-trend" id="month-trend">December 2025</p>
+                        </div>
+                    </div>
+                    <div class="summary-card card-gradient-3">
+                        <div class="card-icon">📊</div>
+                        <div class="card-content">
+                            <p class="card-label">Categories</p>
+                            <h2 class="card-value" id="category-count">0</h2>
+                            <p class="card-trend">Active categories</p>
+                        </div>
+                    </div>
+                    <div class="summary-card card-gradient-4">
+                        <div class="card-icon">📈</div>
+                        <div class="card-content">
+                            <p class="card-label">Average/Day</p>
+                            <h2 class="card-value" id="avg-expenses">$0.00</h2>
+                            <p class="card-trend">This month</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add Expense Form -->
+            <section class="expense-form-section">
+                <div class="glass-card">
+                    <h2 class="section-title">
+                        <span class="title-icon">➕</span>
+                        Add New Expense
+                    </h2>
+                    <form id="expense-form" class="expense-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="expense-amount">Amount</label>
+                                <input type="number" id="expense-amount" step="0.01" min="0" placeholder="0.00"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="expense-category">Category</label>
+                                <select id="expense-category" required>
+                                    <option value="">Select category</option>
+                                    <option value="Food">🍔 Food & Dining</option>
+                                    <option value="Transport">🚗 Transportation</option>
+                                    <option value="Shopping">🛍️ Shopping</option>
+                                    <option value="Entertainment">🎬 Entertainment</option>
+                                    <option value="Bills">💡 Bills & Utilities</option>
+                                    <option value="Health">🏥 Healthcare</option>
+                                    <option value="Education">📚 Education</option>
+                                    <option value="Other">📌 Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="expense-date">Date</label>
+                                <input type="date" id="expense-date" required>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="expense-description">Description</label>
+                                <input type="text" id="expense-description" placeholder="Enter expense description"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="submit-btn">
+                                <span>Add Expense</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M8 3V13M13 8H3" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" />
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="cancel-btn"
+                                style="display: none;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Filters and Actions -->
+            <section class="filters-section">
+                <div class="glass-card">
+                    <div class="filters-header">
+                        <h2 class="section-title">
+                            <span class="title-icon">🔍</span>
+                            Filter & Search
+                        </h2>
+                        <div class="filter-actions">
+                            <button class="btn btn-outline" id="export-btn">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M8 10V2M8 10L5 7M8 10L11 7M2 14H14" stroke="currentColor"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                Export
+                            </button>
+                            <button class="btn btn-outline" id="clear-all-btn">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg>
+                                Clear All
+                            </button>
+                        </div>
+                    </div>
+                    <div class="filters-grid">
+                        <div class="form-group">
+                            <label for="filter-category">Filter by Category</label>
+                            <select id="filter-category">
+                                <option value="">All Categories</option>
+                                <option value="Food">🍔 Food & Dining</option>
+                                <option value="Transport">🚗 Transportation</option>
+                                <option value="Shopping">🛍️ Shopping</option>
+                                <option value="Entertainment">🎬 Entertainment</option>
+                                <option value="Bills">💡 Bills & Utilities</option>
+                                <option value="Health">🏥 Healthcare</option>
+                                <option value="Education">📚 Education</option>
+                                <option value="Other">📌 Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filter-start-date">Start Date</label>
+                            <input type="date" id="filter-start-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="filter-end-date">End Date</label>
+                            <input type="date" id="filter-end-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="search-input">Search</label>
+                            <input type="text" id="search-input" placeholder="Search descriptions...">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="charts-grid">
+                    <div class="glass-card chart-card">
+                        <h3 class="chart-title">Expenses by Category</h3>
+                        <div class="chart-container">
+                            <canvas id="category-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="glass-card chart-card">
+                        <h3 class="chart-title">Monthly Trend</h3>
+                        <div class="chart-container">
+                            <canvas id="trend-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Expenses List -->
+            <section class="expenses-section">
+                <div class="glass-card">
+                    <div class="expenses-header">
+                        <h2 class="section-title">
+                            <span class="title-icon">📝</span>
+                            Recent Expenses
+                        </h2>
+                        <div class="sort-controls">
+                            <label for="sort-by">Sort by:</label>
+                            <select id="sort-by">
+                                <option value="date-desc">Date (Newest)</option>
+                                <option value="date-asc">Date (Oldest)</option>
+                                <option value="amount-desc">Amount (High to Low)</option>
+                                <option value="amount-asc">Amount (Low to High)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="expenses-list" id="expenses-list">
+                        <div class="empty-state">
+                            <div class="empty-icon">💸</div>
+                            <h3>No expenses yet</h3>
+                            <p>Start tracking your expenses by adding your first entry above!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ExpTrack. Track smarter, save better.</p>
+        </div>
+    </footer>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Data</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Choose export format:</p>
+                <div class="export-options">
+                    <button class="btn btn-primary" id="export-csv">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <rect x="3" y="2" width="10" height="12" rx="1" stroke="currentColor" stroke-width="1.5" />
+                            <path d="M5 6H11M5 9H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                        Export as CSV
+                    </button>
+                    <button class="btn btn-primary" id="export-json">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M4 2L2 4V12L4 14M12 2L14 4V12L12 14M6 5L8 8L6 11M10 5L8 8L10 11"
+                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        Export as JSON
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+
+        // PWA Install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Show install button/banner (optional)
+            showInstallPromotion();
+        });
+
+        function showInstallPromotion() {
+            // Create install banner
+            const installBanner = document.createElement('div');
+            installBanner.id = 'install-banner';
+            installBanner.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                animation: slideUp 0.3s ease;
+                max-width: 90%;
+            `;
+
+            installBanner.innerHTML = `
+                <span style="flex: 1; font-weight: 500;">📱 Install this app on your device!</span>
+                <button id="install-btn" style="
+                    background: white;
+                    color: #667eea;
+                    border: none;
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    cursor: pointer;
+                ">Install</button>
+                <button id="dismiss-btn" style="
+                    background: transparent;
+                    color: white;
+                    border: 1px solid white;
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    cursor: pointer;
+                ">Later</button>
+            `;
+
+            document.body.appendChild(installBanner);
+
+            // Install button click
+            document.getElementById('install-btn').addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log(`User response to install prompt: ${outcome}`);
+                    deferredPrompt = null;
+                    installBanner.remove();
+                }
+            });
+
+            // Dismiss button click
+            document.getElementById('dismiss-btn').addEventListener('click', () => {
+                installBanner.remove();
+            });
+        }
+
+        // Detect if app is installed
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA was installed');
+            deferredPrompt = null;
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "index.html",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/service-worker.js",
+            "headers": {
+                "cache-control": "public, max-age=0, must-revalidate",
+                "service-worker-allowed": "/"
+            }
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/$1"
+        }
+    ]
+}
