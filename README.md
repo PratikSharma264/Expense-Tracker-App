@@ -21,7 +21,7 @@ A professional expense tracking Progressive Web App with user authentication.
 
 ## Live Demo
 
-Visit: [Your Vercel URL will be here]
+Visit: expense-tracker-app-pi-fawn.vercel.app
 
 ## Installation
 
